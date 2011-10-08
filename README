@@ -1,6 +1,6 @@
 Purpose:
 ----------------------------------------------------------------------------
-Provide remote SSH agent forwarding. There are very obvious and known attacks against SSH agent forwarding. Quite simply, if a remote host is compromised, your key is compromised. This can be quite serious if you manage multiple sites/deployments and keep all your keys in your local agent.
+Provide remote SSH agent forwarding. There are very obvious and known attacks against SSH agent forwarding. Quite simply, if a remote host is compromised, your key can be used to connect to arbitrary hosts. This can be quite serious if you manage multiple sites/deployments and keep all your keys in your local agent.
 
 Using rssh-agent, you can keep a single corporate private SSH key. Your (trusted) users connect to an SSH host using their own keys, receiving access to a remote, managed ssh-agent.  The users do not have direct access to the remote private keys, only the agent socket.
 
