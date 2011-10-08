@@ -9,7 +9,7 @@ if [ -z "$UHOST" ]; then
     exit 1
 fi
 
-ssh -f -L${LPORT}:127.0.0.1:${RPORT} ${UHOST} sleep 10 &
+ssh -f -L${LPORT}:127.0.0.1:${RPORT} ${UHOST} -N &
 socat UNIX-LISTEN:${SOCKET},fork TCP4:127.0.0.1:${LPORT} &
 echo SSH_AUTH_SOCK=${SOCKET}
 echo SSH_AGENT_PID=$$
