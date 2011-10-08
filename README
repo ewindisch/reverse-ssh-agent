@@ -1,0 +1,3 @@
+Run rssh-agentd on remote server. Listens on localhost, port 222 by default.
+
+Run rssh-agent on local client, requires user@host parameter. Forwards remote host's port 222 by default. Uses random ports and socket names. Works otherwise just like the standard ssh-agent.
