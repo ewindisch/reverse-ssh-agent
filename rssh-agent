@@ -1,0 +1,16 @@
+#!/bin/bash
+UHOST=$1
+LPORT=$RANDOM
+SOCKET="${HOME}/.ssh-agent-hack-${RANDOM}"
+
+if [ -z "$UHOST" ]; then
+    echo "User/host not specified." >&2
+    exit 1
+fi
+
+ssh -L${LPORT}:127.0.0.1:222 ${UHOST} sleep 9000 &
+socat UNIX-LISTEN:${SOCKET},fork TCP4:127.0.0.1:${LPORT} &
+echo SSH_AUTH_SOCK=${SOCKET}
+echo SSH_AGENT_PID=$$
+echo export SSH_AUTH_SOCK
+echo export SSH_AGENT_PID
