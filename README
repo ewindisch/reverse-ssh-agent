@@ -4,6 +4,11 @@ Provide remote SSH agent forwarding. There are very obvious and known attacks ag
 
 Using rssh-agent, you can keep a single corporate private SSH key. Your (trusted) users connect to an SSH host using their own keys, receiving access to a remote, managed ssh-agent.  The users do not have direct access to the remote private keys, only the agent socket.
 
+Requirements:
+----------------------------------------------------------------------------
+* Bash
+* socat (http://www.dest-unreach.org/socat/)
+
 Usage:
 ----------------------------------------------------------------------------
 Run rssh-agentd on remote server. Listens on localhost, port 222 by default.
