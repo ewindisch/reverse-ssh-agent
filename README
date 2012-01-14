@@ -20,6 +20,8 @@ Run rssh-agent on local client. Works similar to ssh-agent.
 
  someuser$ rssh-agent ssh root@remote-machine
 
+This script can also be used to wrap other SSH-AGENT aware applications
+such as 'scp' and 'sftp'.
 
 BUGS:
 ----------------------------------------------------------------------------
