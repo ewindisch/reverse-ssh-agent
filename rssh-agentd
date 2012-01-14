@@ -1,9 +1,22 @@
 #!/bin/bash
-RPORT=222
+. /etc/rssh-agent.conf
+if [ "$1" == '-k' ]; then
+    source $PID_FILE
+    kill -9 "$SSH_AGENT_PID"
+    kill -9 "$SOPID"
+    exit
+fi
 if [ "$1" != '-bg' ]; then
     nohup $0 -bg >/dev/null 2>&1 </dev/null &
     exit
 fi
 eval $(ssh-agent)
-ssh-add ~/.ssh/id_rsa
-socat TCP4-LISTEN:${RPORT},fork UNIX-CLIENT:$SSH_AUTH_SOCK
+ssh-add $KEY_FILE
+socat TCP4-LISTEN:${RPORT},fork,bind=127.0.0.1 UNIX-CLIENT:$SSH_AUTH_SOCK &
+SOPID=$!
+
+cat <<EOF > $PID_FILE
+SSH_AGENT_PID=$SSH_AGENT_PID
+SOPID=$SOPID
+EOF
+wait $SOPID
