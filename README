@@ -12,11 +12,17 @@ Requirements:
 Usage:
 ----------------------------------------------------------------------------
 Run rssh-agentd on remote server. Listens on localhost, port 222 by default.
+If configured for a port higher than 1024, may be run as non-root.
 
-Run rssh-agent on local client, requires user@host parameter. Forwards remote host's port 222 by default. Uses random ports and socket names. Works otherwise just like the standard ssh-agent.
+ root$ rssh-agentd
+
+Run rssh-agent on local client. Works similar to ssh-agent.
+
+ someuser$ rssh-agent ssh root@remote-machine
+
 
 BUGS:
 ----------------------------------------------------------------------------
 Users can presumably add their own keys to the agent. This is not necessarily a security vulnerability on its own, but having too many keys in your agent can trigger too-many-tries errors against SSH servers.
 
-Use of TCP is dangerous and insecure. Switching to Unix sockets would be a significant improvement.
+Use of TCP is dangerous and insecure. Switching to Unix sockets would be a significant improvement. That said, it is relatively safe for a local daemon on an otherwise secure, single-purpose host.

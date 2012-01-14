@@ -1,17 +1,28 @@
 #!/bin/bash
-UHOST=$1
-LPORT=$RANDOM
-RPORT=222
-SOCKET="${HOME}/.ssh-agent-hack-${RANDOM}"
-
-if [ -z "$UHOST" ]; then
-    echo "User/host not specified." >&2
-    exit 1
+. /etc/rssh-agent.conf
+if [ "$1" == "-k" ]; then
+    kill $SSH_AGENT_PID
+    exit 0
 fi
 
-ssh -f -L${LPORT}:127.0.0.1:${RPORT} ${UHOST} -N &
-socat UNIX-LISTEN:${SOCKET},fork TCP4:127.0.0.1:${LPORT} &
-echo SSH_AUTH_SOCK=${SOCKET}
-echo SSH_AGENT_PID=$$
-echo export SSH_AUTH_SOCK
-echo export SSH_AGENT_PID
+SOCKET="${HOME}/.ssh-agent-hack-${RANDOM}"
+
+# If persistent or kill when the child process is over...
+if [ $# -gt 1 ]; then
+    socat UNIX-LISTEN:${SOCKET} TCP4:127.0.0.1:${RPORT} &
+else
+    socat UNIX-LISTEN:${SOCKET},fork,unlink-close=0 TCP4:127.0.0.1:${RPORT} &
+fi
+
+SSH_AGENT_PID=$!
+SSH_AUTH_SOCK=${SOCKET}
+
+# Launch command, or just set env.
+if [ $# -gt 0 ]; then
+    export SSH_AUTH_SOCK
+    export SSH_AGENT_PID
+    $@
+else
+    echo "SSH_AUTH_SOCK=${SSH_AUTH_SOCK}; export SSH_AUTH_SOCK"
+    echo "SSH_AGENT_PID=${SSH_AGENT_PID}; export SSH_AGENT_PID"
+fi
