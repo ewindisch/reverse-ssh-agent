@@ -12,6 +12,7 @@ if [ "$1" != '-bg' ]; then
 fi
 eval $(ssh-agent)
 ssh-add $KEY_FILE
+ssh-add -x  # Lock agent to prevent adds by users
 socat TCP4-LISTEN:${RPORT},fork,bind=127.0.0.1 UNIX-CLIENT:$SSH_AUTH_SOCK &
 SOPID=$!
 
